@@ -1,89 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Zave Download</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-
-  html {
-    scroll-behavior: smooth;
-  }
-
-  body {
-    margin: 0;
-    font-family: 'Roboto', sans-serif;
-    background: linear-gradient(135deg, #1f1f1f, #121212);
-    color: #ccc;
-    height: 200vh; /* to enable scroll */
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 60px 20px;
-  }
-
-  .container {
-    background: rgba(40, 40, 40, 0.75);
-    backdrop-filter: blur(10px);
-    border-radius: 5px;
-    padding: 40px 60px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
-    max-width: 400px;
-    width: 100%;
-    text-align: center;
-    animation: fadeInSlideDown 1s ease forwards;
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-
-  h1 {
-    margin-bottom: 30px;
-    font-weight: 700;
-    color: #bbb;
-    text-shadow: 0 0 8px rgba(128, 128, 128, 0.8);
-  }
-
-  button {
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    background-color: #666666;
-    color: #eee;
-    font-weight: 700;
-    padding: 14px 28px;
-    margin: 10px 0;
-    width: 100%;
-    font-size: 1.1rem;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 102, 102, 0.6);
-  }
-
-  button:hover {
-    background-color: #999999;
-    box-shadow: 0 6px 20px rgba(153, 153, 153, 0.8);
-  }
-
-  button:active {
-    background-color: #555555;
-    box-shadow: 0 2px 10px rgba(85, 85, 85, 0.7);
-  }
-
-  @keyframes fadeInSlideDown {
-    to {
-      opacity: 1;
-      transform: translateY(0);
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zave - Download & Discord</title>
+  <style>
+    * {
+      box-sizing: border-box;
     }
-  }
-</style>
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      background: black;
+      overflow: hidden;
+      color: #fff;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .blur-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      backdrop-filter: blur(12px);
+      background: rgba(0, 0, 0, 0.3);
+      z-index: 1;
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+      animation: fadeInUp 1s ease forwards;
+      opacity: 0;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 0.4em;
+      text-shadow: 0 0 8px rgba(0,0,0,0.7);
+    }
+
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      max-width: 420px;
+      text-shadow: 0 0 6px rgba(0,0,0,0.6);
+    }
+
+    .btn {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid #cccccc99;
+      color: #eee;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0.6rem 1.4rem;
+      margin: 0 0.6rem;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 0 8px rgba(255,255,255,0.15);
+      transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .btn:hover, .btn:focus {
+      background: #666;
+      border-color: #555;
+      box-shadow: 0 0 16px #444;
+      outline: none;
+    }
+
+    .btn:active {
+      transform: scale(0.96);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2.2rem;
+      }
+      .btn {
+        font-size: 0.85rem;
+        padding: 0.6rem 1.2rem;
+        margin: 0.5rem 0;
+        width: 80%;
+        max-width: 240px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1>Zave</h1>
-    <button onclick="window.location.href='https://github.com/tiwa244/ZaveCore/releases/latest'">Download Zave</button>
-    <button onclick="window.open('https://discord.gg/XqZ6sSCm4z', '_blank')">Join Discord Server</button>
+<canvas id="starfield"></canvas>
+<div class="blur-overlay"></div>
+
+<div class="container">
+  <h1>Zave Executor</h1>
+  <p>The cleanest and fastest free executor for Roblox. Built with Node power.</p>
+  <div>
+    <a href="https://github.com/tiwa244/ZaveCore/releases/download/v1.0.0/Zave-Setup-1.0.0.exe" class="btn" download target="_blank">
+      Download Zave
+    </a>
+    <a href="https://discord.gg/XqZ6sSCm4z" class="btn" target="_blank">
+      Join Discord
+    </a>
   </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelector('.container').style.opacity = '1';
+  });
+
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  function createStars(count) {
+    stars = [];
+    for (let i = 0; i < count; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 1.5 + 0.3,
+        speed: Math.random() * 0.4 + 0.2,
+        alpha: Math.random(),
+        alphaChange: Math.random() * 0.02 + 0.005
+      });
+    }
+  }
+
+  function animateStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(star => {
+      ctx.globalAlpha = star.alpha;
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+      ctx.fillStyle = '#ffffff';
+      ctx.fill();
+
+      // Move and reset
+      star.y += star.speed;
+      if (star.y > canvas.height) {
+        star.y = 0;
+        star.x = Math.random() * canvas.width;
+      }
+
+      // Twinkle effect
+      star.alpha += star.alphaChange;
+      if (star.alpha <= 0 || star.alpha >= 1) {
+        star.alphaChange = -star.alphaChange;
+      }
+    });
+    requestAnimationFrame(animateStars);
+  }
+
+  createStars(150);
+  animateStars();
+</script>
 
 </body>
 </html>
